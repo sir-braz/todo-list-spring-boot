@@ -4,10 +4,12 @@ import com.exemplo.todo.entity.Todo;
 import com.exemplo.todo.repository.TodoRepository;
 import com.exemplo.todo.utility.BackendException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class TodoServiceImpl implements TodoService{
 
 
