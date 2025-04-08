@@ -1,10 +1,13 @@
 package com.exemplo.todo.controller;
 
 
+import com.exemplo.todo.entity.Todo;
 import com.exemplo.todo.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/tarefas")
@@ -14,6 +17,31 @@ public class TodoController {
     @Autowired
     public TodoController(TodoService todoService) {
         this.todoService = todoService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Todo>> listarTodos(){
+
+    }
+
+    @PostMapping
+    public ResponseEntity<Todo> criarTodo(@RequestBody Todo todo){
+
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Todo> atualizarDescricao(@PathVariable Long id, @RequestBody Todo todo){
+
+    }
+
+    @PutMapping("/{id}/concluir")
+    public ResponseEntity<Todo> concluirTarefa(@PathVariable Long id){
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id){
+
     }
 
 }
