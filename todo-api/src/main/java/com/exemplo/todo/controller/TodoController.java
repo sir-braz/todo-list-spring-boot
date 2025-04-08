@@ -35,8 +35,11 @@ public class TodoController {
     }
 
     @PutMapping("/{id}/concluir")
-    public ResponseEntity<Todo> concluirTarefa(@PathVariable Long id){
-
+    public ResponseEntity<Todo> concluirTarefa(@PathVariable Long id) {
+        Todo tarefa = todoService.buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada")); // pode trocar por BackendException
+        tarefa.setCompleted(true);
+        return ResponseEntity.ok(todoService.atualizarTodo(id, tarefa));
     }
 
     @DeleteMapping("/{id}")
