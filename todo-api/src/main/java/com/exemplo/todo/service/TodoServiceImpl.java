@@ -2,6 +2,7 @@ package com.exemplo.todo.service;
 
 import com.exemplo.todo.entity.Todo;
 import com.exemplo.todo.repository.TodoRepository;
+import com.exemplo.todo.utility.BackendException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -33,8 +34,15 @@ public class TodoServiceImpl implements TodoService{
     }
 
     @Override
-    public Todo atualizarTodo(Long id, Todo todo) {
-        return null;
+    public Todo atualizarTodo(Long id, Todo todoAtualizado) {
+        Todo existente = todoRepository.findById(id)
+                .orElseThrow(() -> new BackendException("Tarefa não encontrada: " + id));
+
+        existente.setTitle(todoAtualizado.getTitle());
+        existente.setDescription(todoAtualizado.getDescription());
+        existente.setCompleted(todoAtualizado.isCompleted());
+
+        return todoRepository.save(existente);
     }
 
     @Override
