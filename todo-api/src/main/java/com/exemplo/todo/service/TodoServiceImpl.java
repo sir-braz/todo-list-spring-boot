@@ -29,7 +29,7 @@ public class TodoServiceImpl implements TodoService{
 
     @Override
     public Optional<Todo> buscarPorId(Long id) {
-        return Optional.empty();
+        return todoRepository.findById(id);
     }
 
     @Override
