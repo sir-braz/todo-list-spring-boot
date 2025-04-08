@@ -47,6 +47,9 @@ public class TodoServiceImpl implements TodoService{
 
     @Override
     public void deletarTodo(Long id) {
-
+        if (!todoRepository.existsById(id)) {
+            throw new BackendException("Tarefa não encontrada: " + id);
+        }
+        todoRepository.deleteById(id);
     }
 }
