@@ -1,11 +1,22 @@
 package com.exemplo.todo.service;
 
 import com.exemplo.todo.entity.Todo;
+import com.exemplo.todo.repository.TodoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
 
 public class TodoServiceImpl implements TodoService{
+
+
+    private final TodoRepository todoRepository;
+
+    @Autowired
+    public TodoServiceImpl(TodoRepository todoRepository) {
+        this.todoRepository = todoRepository;
+    }
+
     @Override
     public List<Todo> listarTodos() {
         return List.of();
