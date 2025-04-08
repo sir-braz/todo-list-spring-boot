@@ -31,7 +31,7 @@ public class TodoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Todo> atualizarDescricao(@PathVariable Long id, @RequestBody Todo todo){
-
+        return ResponseEntity.ok(todoService.atualizarTodo(id, todo));
     }
 
     @PutMapping("/{id}/concluir")
