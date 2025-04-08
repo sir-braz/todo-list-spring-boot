@@ -3,6 +3,7 @@ package com.exemplo.todo.controller;
 
 import com.exemplo.todo.entity.Todo;
 import com.exemplo.todo.service.TodoService;
+import com.exemplo.todo.utility.BackendException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,10 +38,11 @@ public class TodoController {
     @PutMapping("/{id}/concluir")
     public ResponseEntity<Todo> concluirTarefa(@PathVariable Long id) {
         Todo tarefa = todoService.buscarPorId(id)
-                .orElseThrow(() -> new RuntimeException("Tarefa não encontrada")); // pode trocar por BackendException
+                .orElseThrow(() -> new BackendException("Tarefa não encontrada"));
         tarefa.setCompleted(true);
         return ResponseEntity.ok(todoService.atualizarTodo(id, tarefa));
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id){
