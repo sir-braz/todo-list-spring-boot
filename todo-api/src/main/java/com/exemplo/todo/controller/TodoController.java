@@ -21,12 +21,11 @@ public class TodoController {
 
     @GetMapping
     public ResponseEntity<List<Todo>> listarTodos(){
-
+        return ResponseEntity.ok(todoService.listarTodos());
     }
 
     @PostMapping
     public ResponseEntity<Todo> criarTodo(@RequestBody Todo todo){
-
     }
 
     @PutMapping("/{id}")
