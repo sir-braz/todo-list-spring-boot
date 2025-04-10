@@ -1,54 +1,37 @@
-name: Build com Maven e Análise SonarCloud
+name: Build e Análise SonarCloud
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   build:
-    name: Build e Análise SonarCloud
+    name: Build com Maven e Análise SonarCloud
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:13
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_USER: vinicius
-          POSTGRES_PASSWORD: 123456
-          POSTGRES_DB: todo_db
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
       - name: Checkout do código
         uses: actions/checkout@v3
 
-      - name: Setup do Java 17
+      - name: Set up do Java 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Esperar o PostgreSQL subir
-        run: |
-          until pg_isready -h localhost -p 5432; do
-            echo "Esperando o PostgreSQL subir..."
-            sleep 3
-          done
+      - name: Cache do Maven
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven
 
-      - name: Build com Maven
-        working-directory: ./todo-api
-        run: mvn clean install
-
-      - name: Análise com SonarCloud
-        working-directory: ./todo-api
+      - name: Build e Análise com SonarCloud
         run: mvn verify sonar:sonar \
           -Dsonar.projectKey=sir-braz_todo-list-spring-boot \
           -Dsonar.organization=sir-braz \
