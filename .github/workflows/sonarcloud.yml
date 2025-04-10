@@ -23,6 +23,7 @@ jobs:
 
       - name: Build com Maven
         run: mvn clean install
+        working-directory: ./todo-list-spring-boot
 
       - name: Análise com SonarCloud
         env:
@@ -32,3 +33,4 @@ jobs:
           -Dsonar.organization=sir-braz \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+        working-directory: ./todo-list-spring-boot
