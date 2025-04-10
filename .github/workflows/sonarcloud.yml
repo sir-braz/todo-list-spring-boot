@@ -2,16 +2,29 @@ name: Build com Maven e Análise SonarCloud
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build:
     name: Build e Análise SonarCloud
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: vinicius
+          POSTGRES_PASSWORD: 123456
+          POSTGRES_DB: todo_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout do código
@@ -22,6 +35,13 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      - name: Esperar o PostgreSQL subir
+        run: |
+          until pg_isready -h localhost -p 5432; do
+            echo "Esperando o PostgreSQL subir..."
+            sleep 3
+          done
 
       - name: Build com Maven
         working-directory: ./todo-api
