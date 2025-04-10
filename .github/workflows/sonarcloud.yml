@@ -32,7 +32,7 @@ jobs:
             ${{ runner.os }}-maven
 
       - name: Build e Análise com SonarCloud
-        working-directory: ./todo-list-spring-boot
+        working-directory: .
         run: mvn verify sonar:sonar \
           -Dsonar.projectKey=sir-braz_todo-list-spring-boot \
           -Dsonar.organization=sir-braz \
