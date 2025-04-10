@@ -1,13 +1,14 @@
-name: Análise com SonarCloud
+name: Build e Análise SonarCloud
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    types: [opened, synchronize, reopened]
 
 jobs:
-  sonarcloud:
+  build:
     name: Build e Análise SonarCloud
     runs-on: ubuntu-latest
 
@@ -18,12 +19,12 @@ jobs:
       - name: Setup do Java 17
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
           distribution: 'temurin'
+          java-version: '17'
 
       - name: Build com Maven
         run: mvn clean install
-        working-directory: ./todo-list-spring-boot
+        working-directory: ./todo-api
 
       - name: Análise com SonarCloud
         env:
@@ -33,4 +34,4 @@ jobs:
           -Dsonar.organization=sir-braz \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.token=${{ secrets.SONAR_TOKEN }}
-        working-directory: ./todo-list-spring-boot
+        working-directory: ./todo-api
