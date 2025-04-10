@@ -1,38 +1,29 @@
-name: Build e Análise SonarCloud
+name: Build com Maven + SonarCloud
 
 on:
   push:
     branches:
       - main
   pull_request:
-    branches:
-      - main
+    types: [opened, synchronize, reopened]
 
 jobs:
   build:
-    name: Build com Maven e Análise SonarCloud
+    name: Build e Análise
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout do código
+      - name: Clonar o repositório
         uses: actions/checkout@v3
 
-      - name: Set up do Java 17
+      - name: Configurar Java
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Cache do Maven
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven
-
       - name: Build e Análise com SonarCloud
-        working-directory: .
+        working-directory: ./todo-api
         run: mvn verify sonar:sonar \
           -Dsonar.projectKey=sir-braz_todo-list-spring-boot \
           -Dsonar.organization=sir-braz \
