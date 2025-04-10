@@ -1,31 +1,17 @@
-name: Build e Análise SonarCloud
+name: Build com Maven e Análise SonarCloud
 
 on:
   push:
     branches:
       - main
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches:
+      - main
 
 jobs:
   build:
-    name: Build com Maven e Análise SonarCloud
+    name: Build e Análise SonarCloud
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:14
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_USER: vinicius
-          POSTGRES_PASSWORD: 123456
-          POSTGRES_DB: todo_db
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
       - name: Checkout do código
@@ -34,11 +20,17 @@ jobs:
       - name: Setup do Java 17
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
           java-version: '17'
+          distribution: 'temurin'
 
       - name: Build com Maven
+        working-directory: ./todo-api
         run: mvn clean install
 
       - name: Análise com SonarCloud
-        run: mvn verify sonar:sonar -Dsonar.projectKey=sir-braz_todo-list-spring-boot -Dsonar.organization=sir-braz -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+        working-directory: ./todo-api
+        run: mvn verify sonar:sonar \
+          -Dsonar.projectKey=sir-braz_todo-list-spring-boot \
+          -Dsonar.organization=sir-braz \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
